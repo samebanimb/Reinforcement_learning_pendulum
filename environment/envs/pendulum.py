@@ -79,8 +79,19 @@ class Pendulum(gym.Env):
 
         state = np.reshape(np.array([x, theta, x_dot, theta_dot]), (4, 1))
 
+        state = integrate_RK4(states=state, action=voltage)
+        x = state[1, 1]
+        theta = state[2, 1]
+        x_dot = state[3, 1]
+        theta_dot = state[4, 1]
         self.state = (x, theta, x_dot, theta_dot)
 
+        terminated = bool(
+            x < -self.x_treshold
+            or x > self.x_treshold
+            or theta % math.pi == math.pi / 2
+        )
+        reward = 0
         if not terminated:
             reward = 1.0
         elif self.steps_beyond_terminated is None:
