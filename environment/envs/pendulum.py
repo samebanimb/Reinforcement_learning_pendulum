@@ -5,19 +5,25 @@ It can be used to train an agent in Reinforcement Learning
 """
 
 import math
-from typing import Optional, Union
+from typing import Optional
 
 import numpy as np
 
 import gym
 from gym import spaces, logger
 import pygame
-from gym.error import DependencyNotInstalled
+from pygame import gfxdraw
 
-from utils.RK4 import integrate_RK4
+from environment.utils.RK4 import integrate_RK4
 
 
 class Pendulum(gym.Env):
+    """
+    This class create a gym environment which contains a pendulum on cart
+     for Reinforcement Learning
+
+    """
+
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "render_fps": 50,
@@ -37,12 +43,12 @@ class Pendulum(gym.Env):
 
         self.kinematics_integrator = "RK4"
 
-        self.x_treshold = max_track_length / 2 * track_limitation
-        treshold = self.x_treshold + 0.5 * (max_track_length / 2 - self.x_treshold)
+        self.x_threshold = max_track_length / 2 * track_limitation
+        threshold = self.x_threshold + 0.5 * (max_track_length / 2 - self.x_threshold)
 
         high = np.array(
             [
-                treshold,
+                threshold,
                 np.finfo(np.float32).max,
                 np.finfo(np.float32).max,
                 np.finfo(np.float32).max,
@@ -61,12 +67,15 @@ class Pendulum(gym.Env):
 
         self.render_mode = render_mode
 
+        self.length = 0.5
+
         self.screen_width = 600
         self.screen_height = 400
         self.screen = None
         self.clock = None
         self.isopen = True
         self.state = None
+        self.surf = None
 
         self.steps_beyond_terminated = None
 
@@ -79,7 +88,7 @@ class Pendulum(gym.Env):
 
         state = np.reshape(np.array([x, theta, x_dot, theta_dot]), (4, 1))
 
-        state = integrate_RK4(states=state, action=voltage)
+        state = integrate_RK4(states=state, action=voltage, dt=self.dt)
         x = state[1, 1]
         theta = state[2, 1]
         x_dot = state[3, 1]
@@ -87,17 +96,22 @@ class Pendulum(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         terminated = bool(
-            x < -self.x_treshold
-            or x > self.x_treshold
+            x < -self.x_threshold
+            or x > self.x_threshold
             or theta % math.pi == math.pi / 2
         )
-        reward = 0
+        reward = 0.0
         if not terminated:
-            reward = 1.0
+            reward += -0.1
         elif self.steps_beyond_terminated is None:
-            # Pole just fell!
+
+            if (x < -self.x_threshold) or (x > self.x_threshold):
+                reward += -200
+            else:
+                reward += 200
+
             self.steps_beyond_terminated = 0
-            reward = 1.0
+
         else:
             if self.steps_beyond_terminated == 0:
                 logger.warn(
@@ -121,10 +135,16 @@ class Pendulum(gym.Env):
         super().reset(seed=seed)
         # Note that if you use custom reset bounds, it may lead to out-of-bound
         # state/observations.
-        low, high = utils.maybe_parse_reset_bounds(
-            options, -0.05, 0.05  # default low
-        )  # default high
-        self.state = self.np_random.uniform(low=low, high=high, size=(4,))
+        high = np.array(
+            [
+                self.x_threshold,
+                0,
+                0,
+                0,
+            ],
+            dtype=np.float32,
+        )
+        self.state = self.np_random.uniform(low=-high, high=high, size=(4,))
         self.steps_beyond_terminated = None
 
         if self.render_mode == "human":
@@ -139,14 +159,6 @@ class Pendulum(gym.Env):
                 f'e.g. gym("{self.spec.id}", render_mode="rgb_array")'
             )
             return
-
-        try:
-            import pygame
-            from pygame import gfxdraw
-        except ImportError:
-            raise DependencyNotInstalled(
-                "pygame is not installed, run `pip install gym[classic_control]`"
-            )
 
         if self.screen is None:
             pygame.init()
