@@ -14,7 +14,7 @@ from gymnasium import spaces, logger
 import pygame
 from pygame import gfxdraw
 
-from environment.utils.RK4 import integrate_RK4
+from pendulum_environment.utils.RK4 import integrate_RK4
 
 
 class Pendulum(gym.Env):
@@ -56,8 +56,8 @@ class Pendulum(gym.Env):
             dtype=np.float32,
         )
 
-        action_number = max_voltage * 2 / action_step + 1
-        assert action_number.is_integer(), "The maximal"
+        action_number = int(max_voltage * 2 / action_step + 1)
+        # assert isinstance(action_number, int), "The maximal"
 
         self.action_space = spaces.Discrete(action_number)
         self.observation_space = spaces.Box(-high, high, dtype=np.float32)
@@ -67,7 +67,7 @@ class Pendulum(gym.Env):
 
         self.render_mode = render_mode
 
-        self.length = 0.5
+        self.length = 0.3
 
         self.screen_width = 600
         self.screen_height = 400
@@ -98,7 +98,7 @@ class Pendulum(gym.Env):
         terminated = bool(
             x < -self.x_threshold
             or x > self.x_threshold
-            or theta % math.pi == math.pi / 2
+            or theta % (2 * math.pi) == math.pi
         )
         reward = 0.0
         if not terminated:
@@ -205,7 +205,7 @@ class Pendulum(gym.Env):
 
         pole_coords = []
         for coord in [(l, b), (l, t), (r, t), (r, b)]:
-            coord = pygame.math.Vector2(coord).rotate_rad(-x[2])
+            coord = pygame.math.Vector2(coord).rotate_rad(x[1] + np.pi)
             coord = (coord[0] + cartx, coord[1] + carty + axleoffset)
             pole_coords.append(coord)
         gfxdraw.aapolygon(self.surf, pole_coords, (202, 152, 101))
