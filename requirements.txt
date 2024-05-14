@@ -1,5 +1,4 @@
 pygame
 tensorflow
 gym
-casadi
 numpy
