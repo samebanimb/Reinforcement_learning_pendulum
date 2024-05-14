@@ -1,4 +1,4 @@
 pygame
 tensorflow
-gym
+gymnasium
 numpy

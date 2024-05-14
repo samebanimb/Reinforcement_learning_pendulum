@@ -14,7 +14,7 @@ from gymnasium import spaces, logger
 import pygame
 from pygame import gfxdraw
 
-from pendulum_environment.utils.RK4 import integrate_RK4
+from environment.utils.RK4 import integrate_RK4
 
 
 class Pendulum(gym.Env):
