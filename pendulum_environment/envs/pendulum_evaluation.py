@@ -110,7 +110,7 @@ class Pendulum_Evaluation(gym.Env):
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
         pendulum_upright = cos(theta) < -0.996
-        terminated = bool(x_out_of_bounds or pendulum_upright)
+        terminated = bool(x_out_of_bounds)
         reward = 0
         if terminated:
             if pendulum_upright:
