@@ -116,7 +116,7 @@ class Pendulum(gym.Env):
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
         #    3 * pi / 2
         # )
-
+        reward = 0
         if terminated:
             if pendulum_upright:
                 reward = 100
