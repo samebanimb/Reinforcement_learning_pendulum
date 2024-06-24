@@ -118,9 +118,12 @@ class Pendulum_Evaluation(gym.Env):
             else:
                 reward = -300
         if not terminated:
-            reward = -0.1 - 0.05 * abs(theta % (2 * pi) - pi) - 0.1 * abs(x)
-            if theta > (pi / 2):
-                reward -= 0.2 * cos(theta)
+            if pendulum_upright:
+                reward += 0.5
+            else:
+                reward = -0.2 - 0.05 * (theta % (2 * pi) - pi) ** 2 - 0.1 * (x) ** 2
+                if theta > (pi / 2):
+                    reward -= 0.2 * cos(theta)
 
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
