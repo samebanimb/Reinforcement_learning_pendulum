@@ -16,7 +16,7 @@ from pygame import gfxdraw
 from pendulum_environment.utils import integrate_RK4
 
 
-class Pendulum(gym.Env):
+class Pendulum_Evaluation(gym.Env):
     """
     This class create a gym environment which contains a pendulum on cart
      for Reinforcement Learning
@@ -32,7 +32,7 @@ class Pendulum(gym.Env):
         self,
         render_mode="rgb_array",
         max_voltage=5,
-        max_track_length=1,
+        max_track_length=1.0,
         track_limitation=1,
         action_step=0.01,
     ):
@@ -112,11 +112,6 @@ class Pendulum(gym.Env):
         pendulum_upright = cos(theta) < -0.996
         terminated = bool(x_out_of_bounds or pendulum_upright)
 
-        pendulum_near_center = x < 0.1 and x > -0.1
-        # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
-        #    3 * pi / 2
-        # )
-
         if terminated:
             if pendulum_upright:
                 reward = 100
@@ -153,23 +148,13 @@ class Pendulum(gym.Env):
         super().reset(seed=seed)
         # Note that if you use custom reset bounds, it may lead to out-of-bound
         # state/observations.
-        # self.state = [
-        #    self.np_random.uniform(
-        #        low=(-self.x_threshold + 0.1), high=(self.x_threshold - 0.1)
-        #    ),
-        #    self.np_random.uniform(low=-(8 * pi) / 9, high=(8 * pi) / 9),
-        #    0.0,
-        #    0.0,
-        # ]
         self.state = [
-            self.np_random.uniform(
-                low=(-self.x_threshold + 0.1), high=(self.x_threshold - 0.1)
-            ),
-            self.np_random.uniform(low=-(11 * pi) / 12, high=(11 * pi) / 12),
-            self.np_random.uniform(low=-0.5, high=0.5),
-            self.np_random.uniform(low=-2 * pi, high=2 * pi),
+            self.np_random.uniform(low=(-0.2), high=(0.2)),
+            0.0,
+            0.0,
+            0.0,
         ]
-        self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
+        # self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
         self.steps_beyond_terminated = None
 
         if self.render_mode == "human":
