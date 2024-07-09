@@ -142,7 +142,7 @@ class Pendulum_Evaluation(gym.Env):
                 reward = (
                     -0.01 * (theta % (2 * pi) - pi) ** 2
                     - 0.2 * (x) ** 2
-                    - 0.0001 * theta_dot**2
+                    # - 0.0001 * theta_dot**2
                 )
                 if cos(theta) < 0:
                     reward -= 0.05 * cos(theta)
