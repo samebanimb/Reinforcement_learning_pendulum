@@ -110,12 +110,12 @@ class Pendulum(gym.Env):
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
         pendulum_upright = cos(theta) < -0.995
-        terminated = bool(x_out_of_bounds)
 
-        pendulum_near_center = x < 0.1 and x > -0.1
+        # pendulum_near_center = x < 0.1 and x > -0.1
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
         #    3 * pi / 2
         # )
+        terminated = bool(x_out_of_bounds)
         reward = 0
         if terminated:
             if pendulum_upright:
@@ -124,13 +124,13 @@ class Pendulum(gym.Env):
                 reward = -500
         if not terminated:
             if pendulum_upright:
-                reward += 0.1 - 0.1 * x**2
+                reward += 1 - 0.1 * x**2
             else:
                 reward = (
                     -0.02
                     - 0.005 * (theta % (2 * pi) - pi) ** 2
                     - 0.1 * (x) ** 2
-                    - 0.001 * theta_dot**2
+                    - 0.0001 * theta_dot**2
                 )
                 if cos(theta) < 0:
                     reward -= 0.02 * cos(theta)
@@ -174,8 +174,8 @@ class Pendulum(gym.Env):
                 low=(-self.x_threshold + 0.1), high=(self.x_threshold - 0.1)
             ),
             self.np_random.uniform(low=-pi, high=pi),
-            self.np_random.uniform(low=-0.5, high=0.5),
-            self.np_random.uniform(low=-2 * pi, high=2 * pi),
+            self.np_random.uniform(low=-0.4, high=0.4),
+            self.np_random.uniform(low=-pi, high=pi),
         ]
         self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
         self.steps_beyond_terminated = None
