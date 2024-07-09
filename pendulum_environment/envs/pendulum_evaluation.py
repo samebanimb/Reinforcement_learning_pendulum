@@ -73,7 +73,7 @@ class Pendulum_Evaluation(gym.Env):
         self.render_mode = render_mode
 
         self.length = 0.1
-
+        self._first_time_upright = False
         self.screen_width = 608
         self.screen_height = 400
         self.screen = None
@@ -131,19 +131,21 @@ class Pendulum_Evaluation(gym.Env):
         #            reward -= 0.02 * cos(theta)
         reward = 0
         if terminated:
-            if pendulum_upright:
-                reward = 100
-            else:
-                reward = -500
+            reward = -600
+        self._first_time_upright = pendulum_upright
         if not terminated:
-            if pendulum_upright:
-                reward += 0.1 - 0.1 * x**2
+            if pendulum_upright and self._first_time_upright:
+                reward += 100
+            elif pendulum_upright:
+                reward += 1 - 0.1 * x**2
             else:
-                reward = -0.02 - 0.005 * (theta % (2 * pi) - pi) ** 2 - 0.1 * (x) ** 2
+                reward = (
+                    -0.01 * (theta % (2 * pi) - pi) ** 2
+                    - 0.2 * (x) ** 2
+                    - 0.0001 * theta_dot**2
+                )
                 if cos(theta) < 0:
-                    reward -= 0.02 * cos(theta)
-                if cos(theta) < -0.5:
-                    reward -= 0.01 * theta_dot**2
+                    reward -= 0.05 * cos(theta)
 
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
