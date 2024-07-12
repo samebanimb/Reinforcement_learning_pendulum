@@ -118,23 +118,26 @@ class Pendulum(gym.Env):
         # )
         terminated = bool(x_out_of_bounds)
         reward = 0
+        # if terminated:
+        #    reward = -600
+        # self._first_time_upright = pendulum_upright
+        # if not terminated:
+        #    if pendulum_upright and self._first_time_upright:
+        #        reward += 100
+        #    elif pendulum_upright:
+        #        reward += 1 - 0.1 * x**2
+        #    else:
+        #        reward = (
+        #            -0.01 * (theta % (2 * pi) - pi) ** 2
+        #            - 0.2 * (x) ** 2
+        #            # - 0.0001 * theta_dot**2
+        #        )
+        #        if cos(theta) < 0:
+        #            reward -= 0.05 * cos(theta)
         if terminated:
-            reward = -600
-        self._first_time_upright = pendulum_upright
+            reward = -200
         if not terminated:
-            if pendulum_upright and self._first_time_upright:
-                reward += 100
-            elif pendulum_upright:
-                reward += 1 - 0.1 * x**2
-            else:
-                reward = (
-                    -0.01 * (theta % (2 * pi) - pi) ** 2
-                    - 0.2 * (x) ** 2
-                    # - 0.0001 * theta_dot**2
-                )
-                if cos(theta) < 0:
-                    reward -= 0.05 * cos(theta)
-
+            reward += 0.1 * 0.5 * (1 - cos(theta)) - 0.1 * (x / self.x_threshold) ** 2
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
