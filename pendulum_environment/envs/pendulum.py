@@ -31,14 +31,14 @@ class Pendulum(gym.Env):
     def __init__(
         self,
         render_mode="rgb_array",
-        max_voltage=8,
+        max_voltage=5,
         max_track_length=1,
         track_limitation=1,
         action_step=0.01,
     ):
         # TODO make sure that the entered voltage is not decimal
         # TODO make sure the discretization step is smaller than than the max_voltage
-        self.dt = 0.05
+        self.dt = 0.01
 
         self.kinematics_integrator = "RK4"
 
@@ -137,7 +137,11 @@ class Pendulum(gym.Env):
         if terminated:
             reward = -300
         if not terminated:
-            reward += 0.5 * (1 - cos(theta)) - (x / self.x_threshold) ** 2
+            reward += 0.1 * (
+                0.5 * (1 - cos(theta))
+                - (x / self.x_threshold) ** 2
+                - 0.005 * (1 - cos(theta)) * theta_dot**2
+            )
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
