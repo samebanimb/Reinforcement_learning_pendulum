@@ -31,7 +31,7 @@ class Pendulum(gym.Env):
     def __init__(
         self,
         render_mode="rgb_array",
-        max_voltage=5,
+        max_voltage=7,
         max_track_length=1,
         track_limitation=1,
         action_step=0.01,
@@ -110,7 +110,7 @@ class Pendulum(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < -0.995
+        # pendulum_upright = cos(theta) < -0.995
 
         # pendulum_near_center = x < 0.1 and x > -0.1
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
@@ -177,7 +177,7 @@ class Pendulum(gym.Env):
                 low=(-self.x_threshold + 0.1), high=(self.x_threshold - 0.1)
             ),
             self.np_random.uniform(low=-pi, high=pi),
-            self.np_random.uniform(low=-0.4, high=0.4),
+            self.np_random.uniform(low=-0.1, high=0.1),
             self.np_random.uniform(low=-pi, high=pi),
         ]
         self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
