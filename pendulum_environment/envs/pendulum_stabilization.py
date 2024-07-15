@@ -176,10 +176,10 @@ class Pendulum_Stabilization(gym.Env):
                 low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
             ),
             self.np_random.uniform(
-                low=-pi + (12 * pi / 180), high=pi - (12 * pi / 180)
+                low=-pi + (20 * pi / 180), high=pi - (20 * pi / 180)
             ),
             0.0,
-            self.np_random.uniform(low=-1, high=1),
+            self.np_random.uniform(low=-pi, high=pi),
         ]
         self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
         self.steps_beyond_terminated = None

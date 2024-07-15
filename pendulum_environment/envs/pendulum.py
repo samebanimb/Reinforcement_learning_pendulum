@@ -137,7 +137,7 @@ class Pendulum(gym.Env):
         if terminated:
             reward = -300
         if not terminated:
-            reward += 0.1 * (0.5 * (1 - cos(theta)) - (x / self.x_threshold) ** 2)
+            reward += 0.1 * (0.5 * (1 - cos(theta) - (x / self.x_threshold) ** 2))
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
@@ -176,7 +176,7 @@ class Pendulum(gym.Env):
             self.np_random.uniform(
                 low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
             ),
-            self.np_random.uniform(low=-pi, high=pi),
+            self.np_random.uniform(low=-pi / 2, high=pi / 2),
             0.0,
             self.np_random.uniform(low=-0.5, high=0.5),
         ]
