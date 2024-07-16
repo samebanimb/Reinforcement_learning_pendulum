@@ -110,7 +110,7 @@ class Pendulum_Stabilization(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < cos(170 * pi / 180)
+        pendulum_upright = cos(theta) < cos((170 * pi) / 180)
 
         # pendulum_near_center = x < 0.1 and x > -0.1
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
@@ -176,9 +176,7 @@ class Pendulum_Stabilization(gym.Env):
             self.np_random.uniform(
                 low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
             ),
-            self.np_random.uniform(
-                low=-pi + (15 * pi / 180), high=pi - (15 * pi / 180)
-            ),
+            self.np_random.uniform(low=-pi + (5 * pi) / 180, high=pi - (5 * pi) / 180),
             0.0,
             self.np_random.uniform(low=-pi, high=pi),
         ]
