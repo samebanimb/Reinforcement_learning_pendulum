@@ -38,7 +38,7 @@ class Pendulum_Stabilization(gym.Env):
     ):
         # TODO make sure that the entered voltage is not decimal
         # TODO make sure the discretization step is smaller than than the max_voltage
-        self.dt = 0.01
+        self.dt = 0.05
 
         self.kinematics_integrator = "RK4"
 
@@ -110,13 +110,13 @@ class Pendulum_Stabilization(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < cos(160 * pi / 180)
+        pendulum_not_upright = cos(theta) > cos(165 * pi / 180)
 
         # pendulum_near_center = x < 0.1 and x > -0.1
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
         #    3 * pi / 2
         # )
-        terminated = bool(x_out_of_bounds) and pendulum_upright
+        terminated = bool(x_out_of_bounds or pendulum_not_upright)
         reward = 0
         # if terminated:
         #    reward = -600
