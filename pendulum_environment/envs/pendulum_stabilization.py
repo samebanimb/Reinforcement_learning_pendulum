@@ -176,7 +176,7 @@ class Pendulum_Stabilization(gym.Env):
                 low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
             ),
             self.np_random.uniform(
-                low=-pi + (20 * pi / 180), high=pi - (20 * pi / 180)
+                low=-pi + (15 * pi / 180), high=pi - (15 * pi / 180)
             ),
             0.0,
             self.np_random.uniform(low=-pi, high=pi),

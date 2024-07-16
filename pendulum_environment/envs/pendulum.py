@@ -180,7 +180,6 @@ class Pendulum(gym.Env):
             0.0,
             self.np_random.uniform(low=-0.5, high=0.5),
         ]
-        self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
         self.steps_beyond_terminated = None
 
         if self.render_mode == "human":
