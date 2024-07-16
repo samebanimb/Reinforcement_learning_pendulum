@@ -110,13 +110,13 @@ class Pendulum_Stabilization(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_not_upright = cos(theta) > cos(165 * pi / 180)
+        pendulum_upright = cos(theta) < cos(170 * pi / 180)
 
         # pendulum_near_center = x < 0.1 and x > -0.1
         # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
         #    3 * pi / 2
         # )
-        terminated = bool(x_out_of_bounds or pendulum_not_upright)
+        terminated = bool(x_out_of_bounds)
         reward = 0
         # if terminated:
         #    reward = -600
@@ -135,7 +135,8 @@ class Pendulum_Stabilization(gym.Env):
         #        if cos(theta) < 0:
         #            reward -= 0.05 * cos(theta)
         if not terminated:
-            reward += 1
+            if pendulum_upright:
+                reward += 1
 
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
