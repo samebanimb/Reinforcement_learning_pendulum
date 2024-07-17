@@ -138,8 +138,8 @@ class Pendulum_Evaluation(gym.Env):
                 - 0.5 * (x / self.x_threshold) ** 2
                 - 0.0001 * theta_dot**2
             )
-            if pendulum_upright:
-                reward += 1
+            if cos(theta) < 0:
+                reward -= 0.5 * cos(theta)
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
