@@ -109,7 +109,7 @@ class Pendulum_Evaluation(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < -0.995
+        pendulum_upright = cos(theta) < cos((175 * pi) / 180)
         terminated = bool(x_out_of_bounds)
 
         # pendulum_near_center = x < 0.1 and x > -0.1
@@ -133,7 +133,13 @@ class Pendulum_Evaluation(gym.Env):
         if terminated:
             reward = -300
         if not terminated:
-            reward += 0.5 * (1 - cos(theta)) - 0.5 * (x / self.x_threshold) ** 2
+            reward += (
+                0.5 * (1 - cos(theta))
+                - 0.5 * (x / self.x_threshold) ** 2
+                - 0.005 * theta_dot**2
+            )
+            if pendulum_upright:
+                reward += 1
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
