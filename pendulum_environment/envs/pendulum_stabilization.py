@@ -134,8 +134,8 @@ class Pendulum_Stabilization(gym.Env):
         #        )
         #        if cos(theta) < 0:
         #            reward -= 0.05 * cos(theta)
-        if terminated:
-            reward -= 100
+        # if terminated:
+        #    reward -= 100
         if not terminated:
             reward += 1
 
