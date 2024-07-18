@@ -135,7 +135,8 @@ class Pendulum(gym.Env):
         #        )
         #        if cos(theta) < 0:
         #            reward -= 0.05 * cos(theta)
-
+        if not pendulum_upright:
+            self.k = 1
         if pendulum_upright:
             self.k += 1
         if terminated:
