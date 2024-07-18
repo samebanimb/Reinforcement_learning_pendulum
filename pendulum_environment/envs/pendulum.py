@@ -59,6 +59,7 @@ class Pendulum(gym.Env):
 
         # step = 0.5
         # assert isinstance(action_number, int), "The maximal"
+        self.k = 1
 
         # self.action_space = spaces.Discrete(action_number)
         self.voltage = max_voltage
@@ -134,16 +135,21 @@ class Pendulum(gym.Env):
         #        )
         #        if cos(theta) < 0:
         #            reward -= 0.05 * cos(theta)
+
+        if pendulum_upright:
+            self.k += 1
         if terminated:
             reward = -300
         if not terminated:
             reward += (
                 0.5 * (1 - cos(theta))
                 - 0.5 * (x / self.x_threshold) ** 2
-                - 0.0001 * theta_dot**2
+                - 0.0003 * theta_dot**2
             )
             if cos(theta) < 0:
                 reward -= 0.5 * cos(theta)
+            if pendulum_upright:
+                reward += 1 * self.k
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
@@ -186,6 +192,7 @@ class Pendulum(gym.Env):
             0.0,
             self.np_random.uniform(low=-0.5, high=0.5),
         ]
+        self.k = 1
         self.steps_beyond_terminated = None
 
         if self.render_mode == "human":
