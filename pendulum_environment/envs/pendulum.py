@@ -145,7 +145,7 @@ class Pendulum(gym.Env):
             reward += (
                 0.5 * (1 - cos(theta))
                 - 0.5 * (x / self.x_threshold) ** 2
-                - 0.0002 * theta_dot**2
+                - 0.0005 * theta_dot**2
             )
             if cos(theta) < 0:
                 reward -= 0.5 * cos(theta)
