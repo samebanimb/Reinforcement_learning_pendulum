@@ -138,7 +138,7 @@ class Pendulum(gym.Env):
         if not pendulum_upright:
             self.k = 1
         if pendulum_upright:
-            self.k += 1
+            self.k += 0.01
         # if terminated:
         #    reward = -300
         if not terminated:
