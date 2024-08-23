@@ -106,12 +106,12 @@ class Pendulum(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < cos((175 * pi) / 180)
+        pendulum_upright = cos(theta) < cos((177 * pi) / 180)
         terminated = bool(x_out_of_bounds)
         reward = 0
         if not pendulum_upright:
             self.k = 1
-            reward -= 0.05 * abs(voltage - self.last_voltage)
+            reward -= 0.025 * abs(voltage - self.last_voltage)
         if pendulum_upright:
             if self.k < 40:
                 self.k += 1
