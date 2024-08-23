@@ -73,8 +73,7 @@ def Model(states: np.array, action: Union[int, np.ndarray]) -> np.ndarray:
                 - Jp * Km * Kt * theta_dot * Kg**2 * eta_g
                 + Kt * action * Kg * Mp * eta_g**2 * lp**2 * r_mp
                 + Jp * Kt * action * Kg * eta_g**2 * r_mp
-                + Rm * sin(theta) * Mp**2 * x_dot**2 * lp
-                ^ 3 * r_mp**2
+                + Rm * sin(theta) * Mp**2 * x_dot**2 * lp**3 * r_mp**2
                 + Rm * g * cos(theta) * sin(theta) * Mp**2 * lp**2 * r_mp**2
                 + Jp * Rm * sin(theta) * Mp * x_dot**2 * lp * r_mp**2
                 + Bp * Rm * cos(theta) * Mp * x_dot * lp * r_mp**2
