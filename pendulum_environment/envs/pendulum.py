@@ -92,11 +92,6 @@ class Pendulum(gym.Env):
         assert self.action_space.contains(action), err_msg
         assert self.state is not None, "Call reset before using step method."
         x, theta, x_dot, theta_dot = self.state
-        # voltage = self._action_to_voltage[action]
-        # if action == 1:
-        #    voltage = self.voltage
-        # else:
-        #    voltage = -self.voltage
         voltage = action[0]
 
         state = np.reshape(
@@ -112,52 +107,25 @@ class Pendulum(gym.Env):
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
         pendulum_upright = cos(theta) < cos((175 * pi) / 180)
-
-        # pendulum_near_center = x < 0.1 and x > -0.1
-        # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
-        #    3 * pi / 2
-        # )
         terminated = bool(x_out_of_bounds)
         reward = 0
-        # if terminated:
-        #    reward = -600
-        # self._first_time_upright = pendulum_upright
-        # if not terminated:
-        #    if pendulum_upright and self._first_time_upright:
-        #        reward += 100
-        #    elif pendulum_upright:
-        #        reward += 1 - 0.1 * x**2
-        #    else:
-        #        reward = (
-        #            -0.01 * (theta % (2 * pi) - pi) ** 2
-        #            - 0.2 * (x) ** 2
-        #            # - 0.0001 * theta_dot**2
-        #        )
-        #        if cos(theta) < 0:
-        #            reward -= 0.05 * cos(theta)
         if not pendulum_upright:
             self.k = 1
+            reward -= 0.1 * abs(voltage - self.last_voltage)
         if pendulum_upright:
             if self.k < 40:
                 self.k += 1
+            reward -= 0.025 * abs(voltage - self.last_voltage)
         if self.k == 40:
             a = 10
         else:
             a = 0.5
-            # self.k += 0.01
-        # if terminated:
-        #    reward = -300
         if not terminated:
             reward += (
                 0.5 * (1 - cos(theta))
                 - a * (x / self.x_threshold) ** 2
                 - 0.0003 * theta_dot**2
             )
-            # reward += (
-            #    0.5 * (1 - cos(theta))
-            #    - (x / self.x_threshold) ** 2
-            #    - 0.0003 * theta_dot**2
-            # )
             if cos(theta) < 0:
                 reward -= 0.5 * cos(theta)
             if pendulum_upright:
@@ -206,6 +174,7 @@ class Pendulum(gym.Env):
         ]
         self.k = 1
         self.steps_beyond_terminated = None
+        self.last_voltage = 0.0
 
         if self.render_mode == "human":
             self.render()
