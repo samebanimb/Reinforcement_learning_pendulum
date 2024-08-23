@@ -115,7 +115,7 @@ class Pendulum(gym.Env):
         if pendulum_upright:
             if self.k < 40:
                 self.k += 1
-            reward -= 0.025 * abs(voltage - self.last_voltage)
+            reward -= 0.025 * self.k * abs(voltage - self.last_voltage)
         if self.k == 40:
             a = 10
         else:
