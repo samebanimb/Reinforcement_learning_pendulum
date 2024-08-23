@@ -106,7 +106,7 @@ class Pendulum(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_upright = cos(theta) < cos((177 * pi) / 180)
+        pendulum_upright = cos(theta) < cos((175 * pi) / 180)
         terminated = bool(x_out_of_bounds)
         reward = 0
         if not pendulum_upright:
