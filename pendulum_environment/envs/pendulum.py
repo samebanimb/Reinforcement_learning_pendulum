@@ -126,8 +126,8 @@ class Pendulum(gym.Env):
                 - a * (x / self.x_threshold) ** 2
                 - 0.0003 * theta_dot**2
             )
-            # if cos(theta) < 0:
-            #    reward -= 0.5 * cos(theta)
+            if cos(theta) < 0:
+                reward -= 0.5 * cos(theta)
             if pendulum_upright:
                 reward += 0.25 * self.k
         elif self.steps_beyond_terminated is None:
