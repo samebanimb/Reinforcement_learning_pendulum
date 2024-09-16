@@ -16,7 +16,7 @@ from pygame import gfxdraw
 from pendulum_environment.utils import integrate_RK4
 
 
-class Pendulum_Evaluation(gym.Env):
+class Pendulum_Test1(gym.Env):
     """
     This class create a gym environment which contains a pendulum on cart
      for Reinforcement Learning
@@ -121,16 +121,14 @@ class Pendulum_Evaluation(gym.Env):
         # else:
         #    a = 0.5
         a = 0.5
-        if x_out_of_bounds:
-            reward -= 100
         if not terminated:
             reward += (
                 0.5 * (1 - cos(theta))
                 - a * (x / self.x_threshold) ** 2
                 - 0.0003 * theta_dot**2
             )
-            if cos(theta) < 0:
-                reward -= 0.5 * cos(theta)
+            # if cos(theta) < 0:
+            #    reward -= 0.5 * cos(theta)
             # if pendulum_upright:
             #    reward += 0.125 * self.k
         elif self.steps_beyond_terminated is None:

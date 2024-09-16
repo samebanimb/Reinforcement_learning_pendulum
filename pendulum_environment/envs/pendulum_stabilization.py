@@ -59,6 +59,7 @@ class Pendulum_Stabilization(gym.Env):
 
         # step = 0.5
         # assert isinstance(action_number, int), "The maximal"
+        self.k = 1
 
         # self.action_space = spaces.Discrete(action_number)
         self.voltage = max_voltage
@@ -91,11 +92,6 @@ class Pendulum_Stabilization(gym.Env):
         assert self.action_space.contains(action), err_msg
         assert self.state is not None, "Call reset before using step method."
         x, theta, x_dot, theta_dot = self.state
-        # voltage = self._action_to_voltage[action]
-        # if action == 1:
-        #    voltage = self.voltage
-        # else:
-        #    voltage = -self.voltage
         voltage = action[0]
 
         state = np.reshape(
@@ -110,35 +106,30 @@ class Pendulum_Stabilization(gym.Env):
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
-        pendulum_not_upright = cos(theta) > cos((175 * pi) / 180)
-
-        # pendulum_near_center = x < 0.1 and x > -0.1
-        # pendulum_over_track = theta % (2 * pi) > (pi / 2) and theta % (2 * pi) < (
-        #    3 * pi / 2
-        # )
-        terminated = bool(x_out_of_bounds or pendulum_not_upright)
+        pendulum_upright = cos(theta) < cos((175 * pi) / 180)
+        terminated = bool(x_out_of_bounds)
         reward = 0
-        # if terminated:
-        #    reward = -600
-        # self._first_time_upright = pendulum_upright
-        # if not terminated:
-        #    if pendulum_upright and self._first_time_upright:
-        #        reward += 100
-        #    elif pendulum_upright:
-        #        reward += 1 - 0.1 * x**2
-        #    else:
-        #        reward = (
-        #            -0.01 * (theta % (2 * pi) - pi) ** 2
-        #            - 0.2 * (x) ** 2
-        #            # - 0.0001 * theta_dot**2
-        #        )
-        #        if cos(theta) < 0:
-        #            reward -= 0.05 * cos(theta)
-        # if terminated:
-        #    reward -= 100
+        if not pendulum_upright:
+            self.k = 1
+            # reward -= 0.05 * abs(voltage - self.last_voltage)
+        if pendulum_upright:
+            if self.k < 40:
+                self.k += 1
+            # reward -= 0.025 * self.k * abs(voltage - self.last_voltage)
+        if self.k == 40:
+            a = 2.5
+        else:
+            a = 0.5
         if not terminated:
-            reward += 1
-
+            reward += (
+                0.5 * (1 - cos(theta))
+                - a * (x / self.x_threshold) ** 2
+                - 0.0003 * theta_dot**2
+            )
+            # if cos(theta) < 0:
+            #    reward -= 0.5 * cos(theta)
+            if pendulum_upright:
+                reward += 0.125 * self.k
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
@@ -177,12 +168,13 @@ class Pendulum_Stabilization(gym.Env):
             self.np_random.uniform(
                 low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
             ),
-            self.np_random.uniform(low=pi - (5 * pi) / 180, high=pi + (5 * pi) / 180),
+            self.np_random.uniform(low=-pi, high=pi),
             0.0,
             self.np_random.uniform(low=-0.5, high=0.5),
         ]
-        self.np_random.uniform(low=-self.x_threshold, high=self.x_threshold)
+        self.k = 1
         self.steps_beyond_terminated = None
+        self.last_voltage = 0.0
 
         if self.render_mode == "human":
             self.render()
