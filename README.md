@@ -92,4 +92,4 @@ pip install -e .
 - For hardware testing, ensure compatibility with the Quanser IP02 setup.
 - The repository provides flexibility for users to experiment with different pendulum dynamics and reward strategies.
 
-Feel free to contribute to this project by opening issues or submitting pull requests
+For any questions or suggestions, feel free to contact the project maintainer at [samebanimb15@hotmail.com](mailto:samebanimb15@hotmail.com).
