@@ -38,10 +38,10 @@ pip install -e .
 ### Python Implementation
 
 **Modify Pendulum Dynamics (Optional):**
-- Edit parameters in `utils/model` to change pendulum dynamics.
+- Edit parameters in `utils/model.py` to change pendulum dynamics.
 
 **Modify Reward Function (Optional):**
-- Edit `env/pendulum` to customize the reward function.
+- Edit `env/pendulum.py` to customize the reward function.
 
 **Train the Agent:**
 - Open `Agent.ipynb` in Jupyter Notebook.
