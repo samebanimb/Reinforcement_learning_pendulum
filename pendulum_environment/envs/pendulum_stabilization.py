@@ -103,6 +103,9 @@ class Pendulum_Stabilization(gym.Env):
         theta = state[1, 0]
         x_dot = state[2, 0]
         theta_dot = state[3, 0]
+        if self.n == 140:
+            theta_dot = -15
+        self.n += 1
         self.state = (x, theta, x_dot, theta_dot)
 
         x_out_of_bounds = x < -self.x_threshold or x > self.x_threshold
@@ -164,17 +167,11 @@ class Pendulum_Stabilization(gym.Env):
         #    0.0,
         #    0.0,
         # ]
-        self.state = [
-            self.np_random.uniform(
-                low=(-self.x_threshold + 0.3), high=(self.x_threshold - 0.3)
-            ),
-            self.np_random.uniform(low=-pi, high=pi),
-            0.0,
-            self.np_random.uniform(low=-0.5, high=0.5),
-        ]
+        self.state = [0.0, 0.0, 0.0, 0.0]
         self.k = 1
         self.steps_beyond_terminated = None
         self.last_voltage = 0.0
+        self.n = 0.0
 
         if self.render_mode == "human":
             self.render()
