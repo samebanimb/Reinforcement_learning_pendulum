@@ -54,12 +54,12 @@ pip install -e .
 ## Customization
 
 ### Pendulum Dynamics:
-- Adjust parameters in `utils/model` for Python.
+- Adjust parameters in `utils/model.py` for Python.
 - Modify `DynamicPendulum.mat` for MATLAB.
 
 ### Reward Function:
-- Edit `env/pendulum` for Python.
-- Change `RewardPendulum` for MATLAB.
+- Edit `env/pendulum.py` for Python.
+- Change `RewardPendulum.mat` for MATLAB.
 
 ## MATLAB Implementation
 
@@ -67,14 +67,14 @@ pip install -e .
 - MATLAB version 2022 or later is necessary for using the agent and policy blocks in Simulink.
 
 **Files and Models:**
-- **Agent Configuration:** Located in the MATLAB directory.
+- **Agent Configuration:** `RL_Agent_simulation.mat`Located in the MATLAB directory.
 - **Simulink Models:**
   - `Env_Agent_Simulation.slx`: Open this when executing the agent program.
   - `Deployment_Env.slx`: Use this model for testing on the Quanser IP02 hardware.
 
 **Customization:**
 - **Dynamics:** Modify `DynamicPendulum.mat`.
-- **Reward Function:** Adjust `RewardPendulum`.
+- **Reward Function:** Adjust `RewardPendulum.mat`.
 
 ## Requirements
 
