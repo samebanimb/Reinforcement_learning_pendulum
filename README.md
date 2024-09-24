@@ -14,9 +14,9 @@ This repository focuses on training a reinforcement learning (RL) agent to swing
 ## Features
 - **Custom Gym Environment**: Simulates the dynamics of a pendulum with adjustable start positions.
 - **Modifiable Dynamics and Rewards**: Easily change pendulum parameters and reward functions.
-- **Jupyter Notebook**: `Agent.ipynb` for training and executing the RL agent.
+- **Jupyter Notebook**: `Agent.ipynb` for training and executing the Deep Determistic Policy Gradient (DDPG) agent.
 - **Automatic Weight Saving**: Trained actor weights are saved in a MATLAB file.
-- **MATLAB Integration**: Train an agent directly in MATLAB with pre-configured settings.
+- **MATLAB Integration**: Train a DDPG agent directly in MATLAB with pre-configured settings.
 - **Simulink Models**:
   - `Env_Agent_Simulation.slx` for agent program execution.
   - `Deployment_Env.slx` for testing on real hardware (Quanser IP02).
@@ -38,10 +38,10 @@ pip install -e .
 ### Python Implementation
 
 **Modify Pendulum Dynamics (Optional):**
-- Edit parameters in `utils/model` to change pendulum dynamics.
+- Edit parameters in `utils/model.py` to change pendulum dynamics.
 
 **Modify Reward Function (Optional):**
-- Edit `env/pendulum` to customize the reward function.
+- Edit `env/pendulum.py` to customize the reward function.
 
 **Train the Agent:**
 - Open `Agent.ipynb` in Jupyter Notebook.
@@ -92,4 +92,4 @@ pip install -e .
 - For hardware testing, ensure compatibility with the Quanser IP02 setup.
 - The repository provides flexibility for users to experiment with different pendulum dynamics and reward strategies.
 
-Feel free to contribute to this project by opening issues or submitting pull requests
+For any questions or suggestions, feel free to contact the project maintainer at [samebanimb15@hotmail.com](mailto:samebanimb15@hotmail.com).
