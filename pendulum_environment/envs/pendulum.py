@@ -117,7 +117,7 @@ class Pendulum(gym.Env):
                 self.k += 1
             # reward -= 0.025 * self.k * abs(voltage - self.last_voltage)
         if self.k == 40:
-            a = 2.5
+            a = 10
         else:
             a = 0.5
         if not terminated:
@@ -129,7 +129,7 @@ class Pendulum(gym.Env):
             if cos(theta) < 0:
                 reward -= 0.5 * cos(theta)
             if pendulum_upright:
-                reward += 0.125 * self.k
+                reward += 0.5 * self.k
         elif self.steps_beyond_terminated is None:
             self.steps_beyond_terminated = 0
         else:
