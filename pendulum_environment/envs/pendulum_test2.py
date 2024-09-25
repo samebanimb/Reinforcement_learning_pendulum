@@ -103,8 +103,8 @@ class Pendulum_Test2(gym.Env):
         theta = state[1, 0]
         x_dot = state[2, 0]
         theta_dot = state[3, 0]
-        if self.n == 160:
-            theta_dot = -15
+        # if self.n == 160:
+        #    theta_dot = -15
         self.n += 1
 
         self.state = (x, theta, x_dot, theta_dot)

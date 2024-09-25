@@ -170,7 +170,7 @@ class Pendulum(gym.Env):
             ),
             self.np_random.uniform(low=-pi, high=pi),
             0.0,
-            self.np_random.uniform(low=-0.5, high=0.5),
+            self.np_random.uniform(low=-5.0, high=5.0),
         ]
         self.k = 1
         self.steps_beyond_terminated = None
